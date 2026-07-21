@@ -1,0 +1,26 @@
+## Recommended Internal Structure
+
+The system should be divided into two main Python components:
+
+WIDS System
+│
+├── Monitoring and Detection Service
+│   ├── Packet capture
+│   ├── Packet parsing
+│   ├── Feature extraction
+│   ├── Detection rules
+│   ├── Alert generation
+│   └── Alert correlation
+│
+├── Flask Backend
+│   ├── REST API
+│   ├── Authentication
+│   ├── Database access
+│   ├── Rule configuration
+│   ├── Monitoring control
+│   ├── Statistics
+│   └── System health
+│
+├── SQLite Database
+│
+└── React Dashboard

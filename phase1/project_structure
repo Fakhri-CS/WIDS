@@ -1,0 +1,67 @@
+## Recommended Project Structure
+
+wids/
+│
+├── capture_service/
+│   ├── __init__.py
+│   ├── capture.py
+│   ├── interface_manager.py
+│   ├── packet_parser.py
+│   ├── feature_extractor.py
+│   └── capture_session.py
+│
+├── detection_engine/
+│   ├── __init__.py
+│   ├── engine.py
+│   ├── rule_base.py
+│   ├── correlation.py
+│   └── rules/
+│       ├── deauth_flood.py
+│       ├── disassociation_flood.py
+│       ├── probe_flood.py
+│       ├── authentication_flood.py
+│       ├── unknown_ap.py
+│       ├── unauthorized_bssid.py
+│       ├── evil_twin.py
+│       ├── unauthorized_channel.py
+│       ├── security_change.py
+│       ├── beacon_flood.py
+│       └── mac_conflict.py
+│
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── extensions.py
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── api/
+│   │   │   ├── alerts.py
+│   │   │   ├── devices.py
+│   │   │   ├── access_points.py
+│   │   │   ├── rules.py
+│   │   │   ├── monitoring.py
+│   │   │   ├── statistics.py
+│   │   │   └── system.py
+│   │   └── config.py
+│   ├── migrations/
+│   ├── tests/
+│   ├── run.py
+│   └── requirements.txt
+│
+├── dashboard/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   └── App.jsx
+│   └── package.json
+│
+├── logs/
+├── scripts/
+├── tests/
+├── config/
+├── .env.example
+├── docker-compose.yml
+└── README.md

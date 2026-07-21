@@ -1,0 +1,25 @@
+## Final Data Flow
+
+Wireless packets
+      ↓
+Monitor-mode Wi-Fi adapter
+      ↓
+PyShark packet capture
+      ↓
+IEEE 802.11 packet parsing
+      ↓
+Feature extraction and time-window aggregation
+      ↓
+Rule evaluation
+      ↓
+Alert generation
+      ↓
+Alert correlation
+      ↓
+SQLAlchemy database service
+      ↓
+SQLite database
+      ↓
+Flask REST API
+      ↓
+React dashboard
