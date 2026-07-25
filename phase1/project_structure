@@ -1,67 +1,106 @@
-## Recommended Project Structure
-
-wids/
+WIDS/
 │
-├── capture_service/
-│   ├── __init__.py
-│   ├── capture.py
-│   ├── interface_manager.py
-│   ├── packet_parser.py
-│   ├── feature_extractor.py
-│   └── capture_session.py
+├── src/
+│   └── wids/
+│       ├── __init__.py
+│       ├── config.py
+│       ├── extensions.py
+│       │
+│       ├── api/
+│       │   ├── __init__.py
+│       │   ├── health_routes.py
+│       │   ├── alert_routes.py
+│       │   ├── access_point_routes.py
+│       │   ├── device_routes.py
+│       │   ├── capture_routes.py
+│       │   └── rule_routes.py
+│       │
+│       ├── models/
+│       │   ├── __init__.py
+│       │   ├── capture_session.py
+│       │   ├── access_point.py
+│       │   ├── device.py
+│       │   ├── wireless_event.py
+│       │   ├── detection_rule.py
+│       │   ├── alert.py
+│       │   └── alert_event.py
+│       │
+│       ├── schemas/
+│       │   ├── alert_schemas.py
+│       │   ├── capture_schemas.py
+│       │   └── rule_schemas.py
+│       │
+│       ├── repositories/
+│       │   ├── alert_repository.py
+│       │   ├── access_point_repository.py
+│       │   ├── device_repository.py
+│       │   └── rule_repository.py
+│       │
+│       ├── services/
+│       │   ├── alert_service.py
+│       │   ├── capture_service.py
+│       │   ├── access_point_service.py
+│       │   └── rule_service.py
+│       │
+│       ├── capture/
+│       │   ├── interface_manager.py
+│       │   ├── capture_manager.py
+│       │   ├── packet_source.py
+│       │   ├── packet_parser.py
+│       │   ├── channel_manager.py
+│       │   └── frame_models.py
+│       │
+│       ├── detection/
+│       │   ├── engine.py
+│       │   ├── context.py
+│       │   ├── sliding_window.py
+│       │   ├── correlation.py
+│       │   ├── event_models.py
+│       │   └── rules/
+│       │       ├── base_rule.py
+│       │       ├── deauth_flood.py
+│       │       ├── disassociation_flood.py
+│       │       ├── authentication_flood.py
+│       │       ├── probe_flood.py
+│       │       ├── beacon_flood.py
+│       │       ├── unknown_ap.py
+│       │       ├── unauthorized_bssid.py
+│       │       ├── security_change.py
+│       │       ├── unauthorized_channel.py
+│       │       ├── evil_twin.py
+│       │       └── mac_conflict.py
+│       │
+│       ├── workers/
+│       │   └── capture_worker.py
+│       │
+│       └── common/
+│           ├── logging.py
+│           ├── exceptions.py
+│           ├── mac_address.py
+│           └── time.py
 │
-├── detection_engine/
-│   ├── __init__.py
-│   ├── engine.py
-│   ├── rule_base.py
-│   ├── correlation.py
-│   └── rules/
-│       ├── deauth_flood.py
-│       ├── disassociation_flood.py
-│       ├── probe_flood.py
-│       ├── authentication_flood.py
-│       ├── unknown_ap.py
-│       ├── unauthorized_bssid.py
-│       ├── evil_twin.py
-│       ├── unauthorized_channel.py
-│       ├── security_change.py
-│       ├── beacon_flood.py
-│       └── mac_conflict.py
-│
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── extensions.py
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   ├── api/
-│   │   │   ├── alerts.py
-│   │   │   ├── devices.py
-│   │   │   ├── access_points.py
-│   │   │   ├── rules.py
-│   │   │   ├── monitoring.py
-│   │   │   ├── statistics.py
-│   │   │   └── system.py
-│   │   └── config.py
-│   ├── migrations/
-│   ├── tests/
-│   ├── run.py
-│   └── requirements.txt
-│
-├── dashboard/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── hooks/
-│   │   └── App.jsx
-│   └── package.json
-│
-├── logs/
-├── scripts/
-├── tests/
 ├── config/
+│   ├── rules.yaml
+│   └── trusted_access_points.yaml
+│
+├── migrations/
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   ├── api/
+│   ├── detection/
+│   └── fixtures/
+│
+├── pcap_samples/
+│
+├── scripts/
+│
+├── compose.yaml
+├── requirements.in
+├── requirements-dev.in
+├── requirements.txt
+├── .env
 ├── .env.example
-├── docker-compose.yml
+├── .gitignore
 └── README.md
