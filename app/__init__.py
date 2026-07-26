@@ -8,7 +8,7 @@ from app.controllers.alert_controller import alert_controller
 from app.controllers.capture_controller import capture_controller
 from app.controllers.device_controller import device_controller
 from app.controllers.health_controller import health_controller
-
+from app.controllers.rule_controller import rule_controller
 
 def create_app() -> Flask:
     """Create and configure the Flask application."""
@@ -21,5 +21,6 @@ def create_app() -> Flask:
     application.register_blueprint(alert_controller)
     application.register_blueprint(device_controller)
     application.register_blueprint(access_point_controller)
+    application.register_blueprint(rule_controller)
 
     return application
