@@ -1,8 +1,0 @@
--r requirements.in
-
-pytest
-pytest-cov
-pytest-mock
-ruff
-mypy
-pip-tools
