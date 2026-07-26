@@ -21,3 +21,6 @@ __pycache__/
 # Operating-system files
 .DS_Store
 Thumbs.db
+
+# Keep the example environment file in Git
+!.env.example
