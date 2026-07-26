@@ -72,3 +72,14 @@ def stop_capture():
             "capture": capture,
         }
     ), HTTPStatus.OK
+
+@capture_controller.get("/status")
+def get_capture_status():
+    """Return the current packet-capture status."""
+    capture = capture_service.get_status()
+
+    return jsonify(
+        {
+            "capture": capture,
+        }
+    ), HTTPStatus.OK

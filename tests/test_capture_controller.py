@@ -95,3 +95,46 @@ def test_stop_capture_returns_conflict_when_not_running(
     assert response.get_json() == {
         "error": "No capture session is currently running.",
     }
+def test_get_capture_status_returns_stopped(
+    client: FlaskClient,
+) -> None:
+    ensure_capture_is_stopped(client)
+
+    response = client.get(
+        "/api/v1/capture/status",
+    )
+
+    assert response.status_code == HTTPStatus.OK
+
+    assert response.get_json() == {
+        "capture": {
+            "status": "stopped",
+            "interface": None,
+        }
+    }
+
+
+def test_get_capture_status_returns_running(
+    client: FlaskClient,
+) -> None:
+    ensure_capture_is_stopped(client)
+
+    client.post(
+        "/api/v1/capture/start",
+        json={
+            "interface": "wlan0mon",
+        },
+    )
+
+    response = client.get(
+        "/api/v1/capture/status",
+    )
+
+    assert response.status_code == HTTPStatus.OK
+
+    assert response.get_json() == {
+        "capture": {
+            "status": "running",
+            "interface": "wlan0mon",
+        }
+    }

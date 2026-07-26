@@ -55,3 +55,38 @@ def test_capture_can_start_again_after_stopping() -> None:
         "status": "running",
         "interface": "wlan1mon",
     }
+def test_get_status_returns_stopped_initially() -> None:
+    service = CaptureService()
+
+    result = service.get_status()
+
+    assert result == {
+        "status": "stopped",
+        "interface": None,
+    }
+
+
+def test_get_status_returns_running_after_start() -> None:
+    service = CaptureService()
+
+    service.start("wlan0mon")
+    result = service.get_status()
+
+    assert result == {
+        "status": "running",
+        "interface": "wlan0mon",
+    }
+
+
+def test_get_status_returns_stopped_after_stop() -> None:
+    service = CaptureService()
+
+    service.start("wlan0mon")
+    service.stop()
+
+    result = service.get_status()
+
+    assert result == {
+        "status": "stopped",
+        "interface": None,
+    }
