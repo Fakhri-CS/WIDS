@@ -1,0 +1,15 @@
+GET /api/v1/health — Checks whether the Flask API and its essential dependencies are available.
+
+POST /api/v1/capture/start — Requests the capture worker to start monitoring wireless traffic.
+
+POST /api/v1/capture/stop — Requests the capture worker to stop the active capture operation.
+
+GET /api/v1/capture/status — Returns whether capture is running and its interface, channel, counters, and errors.
+
+GET /api/v1/alerts — Returns detected security alerts and supports filtering and incremental polling.
+
+GET /api/v1/devices — Returns wireless client devices discovered during packet capture.
+
+GET /api/v1/access-points — Returns wireless access points discovered during packet capture.
+
+GET /api/v1/rules — Returns the detection rules and their current read-only configurations.
