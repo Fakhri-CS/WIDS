@@ -3,6 +3,7 @@
 from flask import Flask
 
 from app.config import get_config
+from app.controllers.capture_controller import capture_controller
 from app.controllers.health_controller import health_controller
 
 
@@ -13,5 +14,6 @@ def create_app() -> Flask:
     application.config.from_mapping(get_config())
 
     application.register_blueprint(health_controller)
+    application.register_blueprint(capture_controller)
 
     return application
