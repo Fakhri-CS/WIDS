@@ -52,3 +52,23 @@ def start_capture():
             "capture": capture,
         }
     ), HTTPStatus.ACCEPTED
+
+
+@capture_controller.post("/stop")
+def stop_capture():
+    """Stop the current packet-capture session."""
+    capture = capture_service.stop()
+
+    if capture is None:
+        return jsonify(
+            {
+                "error": "No capture session is currently running.",
+            }
+        ), HTTPStatus.CONFLICT
+
+    return jsonify(
+        {
+            "message": "Capture stopped successfully.",
+            "capture": capture,
+        }
+    ), HTTPStatus.OK

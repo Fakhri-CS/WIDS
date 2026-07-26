@@ -23,3 +23,21 @@ class CaptureService:
             "status": "running",
             "interface": interface,
         }
+
+    def stop(self) -> dict[str, str] | None:
+        """Stop the current capture session.
+
+        Return None when no capture session is running.
+        """
+        if not self._is_running:
+            return None
+
+        interface = self._interface or "unknown"
+
+        self._is_running = False
+        self._interface = None
+
+        return {
+            "status": "stopped",
+            "interface": interface,
+        }
