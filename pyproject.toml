@@ -17,12 +17,13 @@ dependencies = [
 
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=8,<10",
-    "pytest-cov>=5,<8",
-    "pytest-mock>=3,<4",
-    "ruff>=0.9,<1",
-    "mypy>=1.13,<2",
+dependencies = [
+    "Flask>=3.1,<4",
+    "Flask-SQLAlchemy>=3.1,<4",
+    "Flask-Migrate>=4,<5",
+    "SQLAlchemy>=2.0,<3",
+    "psycopg[binary]>=3.2,<4",
+    "python-dotenv>=1,<2",
 ]
 
 
@@ -59,3 +60,10 @@ select = [
 python_version = "3.12"
 strict = true
 warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "flask_migrate",
+    "flask_migrate.*",
+]
+ignore_missing_imports = true
