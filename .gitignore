@@ -1,0 +1,49 @@
+# Virtual environments
+.venv/
+venv/
+**/.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Testing and code quality
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Captured wireless traffic
+captures/*
+!captures/.gitkeep
+*.pcap
+*.pcapng
+*.cap
+
+# Logs
+logs/*
+!logs/.gitkeep
+*.log
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# Operating system
+.DS_Store
+Thumbs.db
