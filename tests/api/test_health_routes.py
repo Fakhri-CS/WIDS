@@ -12,7 +12,7 @@ def test_create_app_returns_flask_application() -> None:
     assert app.config["APP_ENV"] == "testing"
 
 
-def test_health_endpoint_returns_api_status() -> None:
+def test_health_endpoint_returns_api_and_database_status() -> None:
     app = create_app(TestingConfig)
     client = app.test_client()
 
@@ -24,6 +24,7 @@ def test_health_endpoint_returns_api_status() -> None:
     response_data = response.get_json()
 
     assert response_data == {
+        "database": "up",
         "environment": "testing",
         "service": "wids-api",
         "status": "up",
