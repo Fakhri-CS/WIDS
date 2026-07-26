@@ -48,10 +48,3 @@ class CaptureService:
             "status": "running" if self._is_running else "stopped",
             "interface": self._interface,
         }
-
-    def get_status(self) -> dict[str, str | None]:
-        """Return the current packet-capture status."""
-        return {
-            "status": "running" if self._is_running else "stopped",
-            "interface": self._interface,
-        }
