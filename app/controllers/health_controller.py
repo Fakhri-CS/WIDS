@@ -1,8 +1,7 @@
 """Health-related HTTP endpoints."""
-
 from http import HTTPStatus
-
-from flask import Blueprint, Response, jsonify
+from flask import Blueprint, jsonify
+from app.services.health_service import HealthService
 
 
 health_controller = Blueprint(
@@ -10,15 +9,12 @@ health_controller = Blueprint(
     __name__,
 )
 
+health_service = HealthService()
+
 
 @health_controller.get("/health")
-def get_health() -> tuple[Response, int]:
-    """Return the current status of the WIDS backend."""
-    response = jsonify(
-        {
-            "status": "ok",
-            "service": "wids-backend",
-        }
-    )
+def get_health():
+    """Return the current backend status."""
+    result = health_service.get_status()
 
-    return response, int(HTTPStatus.OK)
+    return jsonify(result), HTTPStatus.OK
