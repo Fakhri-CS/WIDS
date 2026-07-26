@@ -3,6 +3,7 @@
 from flask import Flask
 
 from app.config import get_config
+from app.controllers.access_point_controller import access_point_controller
 from app.controllers.alert_controller import alert_controller
 from app.controllers.capture_controller import capture_controller
 from app.controllers.device_controller import device_controller
@@ -19,5 +20,6 @@ def create_app() -> Flask:
     application.register_blueprint(capture_controller)
     application.register_blueprint(alert_controller)
     application.register_blueprint(device_controller)
+    application.register_blueprint(access_point_controller)
 
     return application
