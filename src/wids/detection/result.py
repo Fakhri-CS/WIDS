@@ -20,8 +20,13 @@ class RuleEvaluationResult:
         if self.disposition is not DetectionDisposition.DETECTED and self.event is not None:
             raise ValueError("Only a detected result may contain a DetectionEvent")
 
-        if self.disposition is DetectionDisposition.SKIPPED and not self.reason:
-            raise ValueError("A skipped result must include a reason")
+        dispositions_requiring_reason = {
+            DetectionDisposition.SKIPPED,
+            DetectionDisposition.SUPPRESSED,
+        }
+
+        if self.disposition in dispositions_requiring_reason and not self.reason:
+            raise ValueError("A skipped or suppressed result must include a reason")
 
     @classmethod
     def detected(
@@ -46,5 +51,15 @@ class RuleEvaluationResult:
     ) -> Self:
         return cls(
             disposition=DetectionDisposition.SKIPPED,
+            reason=reason,
+        )
+
+    @classmethod
+    def suppressed(
+        cls,
+        reason: str,
+    ) -> Self:
+        return cls(
+            disposition=DetectionDisposition.SUPPRESSED,
             reason=reason,
         )

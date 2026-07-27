@@ -16,3 +16,4 @@ class DetectionDisposition(StrEnum):
     DETECTED = "detected"
     NOT_DETECTED = "not_detected"
     SKIPPED = "skipped"
+    SUPPRESSED = "suppressed"

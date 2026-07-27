@@ -67,3 +67,11 @@ def test_skipped_result_rejects_empty_reason() -> None:
         RuleEvaluationResult(
             disposition=DetectionDisposition.SKIPPED,
         )
+
+
+def test_suppressed_result_contains_reason() -> None:
+    result = RuleEvaluationResult.suppressed("cooldown_active")
+
+    assert result.disposition is DetectionDisposition.SUPPRESSED
+    assert result.event is None
+    assert result.reason == "cooldown_active"
