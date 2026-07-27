@@ -17,9 +17,7 @@ def app() -> Generator[Flask, None, None]:
     application = create_app(
         {
             "TESTING": True,
-            "SQLALCHEMY_DATABASE_URI": (
-                "sqlite+pysqlite:///:memory:"
-            ),
+            "SQLALCHEMY_DATABASE_URI": ("sqlite+pysqlite:///:memory:"),
         }
     )
 
@@ -42,6 +40,9 @@ def database(
 
 
 @pytest.fixture()
-def client(app: Flask) -> FlaskClient:
-    """Create an HTTP test client for the Flask application."""
+def client(
+    app: Flask,
+    database: SQLAlchemy,
+) -> FlaskClient:
+    """Create an HTTP client with isolated database tables."""
     return app.test_client()

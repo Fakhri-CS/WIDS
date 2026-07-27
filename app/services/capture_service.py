@@ -1,27 +1,49 @@
 """Application service for packet capture operations."""
 
+from sqlalchemy import select
+
+from app.extensions import db
+from app.models import CaptureSession
+from app.models.capture_session import utc_now
+
 
 class CaptureService:
-    """Manage the current packet-capture state."""
+    """Manage packet-capture session state in the database."""
 
-    def __init__(self) -> None:
-        self._is_running = False
-        self._interface: str | None = None
+    @staticmethod
+    def _get_running_session() -> CaptureSession | None:
+        """Return the most recent running capture session."""
+        statement = (
+            select(CaptureSession)
+            .where(CaptureSession.status == "running")
+            .order_by(
+                CaptureSession.started_at.desc(),
+                CaptureSession.id.desc(),
+            )
+            .limit(1)
+        )
+
+        return db.session.scalar(statement)
 
     def start(self, interface: str) -> dict[str, str] | None:
-        """Start a capture session.
+        """Create a running capture session.
 
         Return None when capture is already running.
         """
-        if self._is_running:
+        if self._get_running_session() is not None:
             return None
 
-        self._is_running = True
-        self._interface = interface
+        capture_session = CaptureSession(
+            interface=interface,
+            status="running",
+        )
+
+        db.session.add(capture_session)
+        db.session.commit()
 
         return {
-            "status": "running",
-            "interface": interface,
+            "status": capture_session.status,
+            "interface": capture_session.interface,
         }
 
     def stop(self) -> dict[str, str] | None:
@@ -29,22 +51,32 @@ class CaptureService:
 
         Return None when no capture session is running.
         """
-        if not self._is_running:
+        capture_session = self._get_running_session()
+
+        if capture_session is None:
             return None
 
-        interface = self._interface or "unknown"
+        capture_session.status = "stopped"
+        capture_session.stopped_at = utc_now()
 
-        self._is_running = False
-        self._interface = None
+        db.session.commit()
 
         return {
-            "status": "stopped",
-            "interface": interface,
+            "status": capture_session.status,
+            "interface": capture_session.interface,
         }
 
     def get_status(self) -> dict[str, str | None]:
-        """Return the current packet-capture status."""
+        """Return the persisted packet-capture status."""
+        capture_session = self._get_running_session()
+
+        if capture_session is None:
+            return {
+                "status": "stopped",
+                "interface": None,
+            }
+
         return {
-            "status": "running" if self._is_running else "stopped",
-            "interface": self._interface,
+            "status": capture_session.status,
+            "interface": capture_session.interface,
         }
