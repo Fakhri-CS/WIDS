@@ -10,6 +10,7 @@ from app.controllers.device_controller import device_controller
 from app.controllers.health_controller import health_controller
 from app.controllers.rule_controller import rule_controller
 from app.extensions import db, migrate
+from app.models import CaptureSession  # noqa: F401
 
 
 def create_app(

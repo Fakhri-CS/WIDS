@@ -1,2 +1,6 @@
 -r requirements.txt
+
+mypy
 pytest
+ruff
+types-Flask-Migrate
