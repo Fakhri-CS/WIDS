@@ -1,4 +1,4 @@
-"""WIDS backend application package."""
+"""HTTP controller package for the WIDS backend."""
 
 from flask import Flask
 

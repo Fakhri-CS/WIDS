@@ -9,12 +9,27 @@ from app.controllers.capture_controller import capture_controller
 from app.controllers.device_controller import device_controller
 from app.controllers.health_controller import health_controller
 from app.controllers.rule_controller import rule_controller
+from app.extensions import db, migrate
 
-def create_app() -> Flask:
+
+def create_app(
+    test_config: dict[str, object] | None = None,
+) -> Flask:
     """Create and configure the Flask application."""
     application = Flask(__name__)
 
     application.config.from_mapping(get_config())
+
+    if test_config is not None:
+        application.config.update(test_config)
+
+    if not application.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError(
+            "DATABASE_URL is not configured."
+        )
+
+    db.init_app(application)
+    migrate.init_app(application, db)
 
     application.register_blueprint(health_controller)
     application.register_blueprint(capture_controller)

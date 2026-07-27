@@ -3,7 +3,7 @@
 import os
 
 
-def get_config() -> dict[str, str | None]:
+def get_config() -> dict[str, object]:
     """Read application settings from environment variables."""
     return {
         "SECRET_KEY": os.getenv("WIDS_SECRET_KEY"),
@@ -15,4 +15,6 @@ def get_config() -> dict[str, str | None]:
             "WIDS_LOG_LEVEL",
             "INFO",
         ),
+        "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL"),
+        "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     }

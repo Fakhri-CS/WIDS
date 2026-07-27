@@ -10,10 +10,13 @@ from app import create_app
 @pytest.fixture()
 def app() -> Flask:
     """Create an isolated Flask application for each test."""
-    application = create_app()
-
-    application.config.update(
-        TESTING=True,
+    application = create_app(
+        {
+            "TESTING": True,
+            "SQLALCHEMY_DATABASE_URI": (
+                "sqlite+pysqlite:///:memory:"
+            ),
+        }
     )
 
     yield application
