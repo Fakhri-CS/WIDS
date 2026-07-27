@@ -6,7 +6,6 @@ from flask import Blueprint, jsonify
 
 from app.services.alert_service import AlertService
 
-
 alert_controller = Blueprint(
     "alert_controller",
     __name__,

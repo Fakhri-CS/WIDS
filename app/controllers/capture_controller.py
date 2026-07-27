@@ -6,7 +6,6 @@ from flask import Blueprint, current_app, jsonify, request
 
 from app.services.capture_service import CaptureService
 
-
 capture_controller = Blueprint(
     "capture_controller",
     __name__,

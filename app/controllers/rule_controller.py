@@ -6,7 +6,6 @@ from flask import Blueprint, jsonify
 
 from app.services.rule_service import RuleService
 
-
 rule_controller = Blueprint(
     "rule_controller",
     __name__,

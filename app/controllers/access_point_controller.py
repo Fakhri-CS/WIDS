@@ -6,7 +6,6 @@ from flask import Blueprint, jsonify
 
 from app.services.access_point_service import AccessPointService
 
-
 access_point_controller = Blueprint(
     "access_point_controller",
     __name__,

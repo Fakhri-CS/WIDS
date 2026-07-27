@@ -6,7 +6,6 @@ from flask import Blueprint, jsonify
 
 from app.services.device_service import DeviceService
 
-
 device_controller = Blueprint(
     "device_controller",
     __name__,

@@ -1,8 +1,9 @@
 """Health-related HTTP endpoints."""
 from http import HTTPStatus
-from flask import Blueprint, jsonify
-from app.services.health_service import HealthService
 
+from flask import Blueprint, jsonify
+
+from app.services.health_service import HealthService
 
 health_controller = Blueprint(
     "health_controller",
