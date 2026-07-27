@@ -61,10 +61,7 @@ def test_detection_event_serializes_to_json_compatible_data() -> None:
 
     serialized = event.to_dict()
 
-    assert (
-        serialized["event_contract_version"]
-        == DETECTION_EVENT_CONTRACT_VERSION
-    )
+    assert serialized["event_contract_version"] == DETECTION_EVENT_CONTRACT_VERSION
     assert serialized["rule_code"] == "WIDS-R001"
     assert serialized["severity"] == "high"
     assert serialized["detected_at"].endswith("Z")
