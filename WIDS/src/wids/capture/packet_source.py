@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import importlib
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
-import importlib
 from pathlib import Path
 from threading import Event, Lock
 from typing import Any, Protocol
@@ -38,12 +38,26 @@ class PacketEnvelope:
 class PacketSource(Protocol):
     """Common interface implemented by every packet source."""
 
-    capture_session_id: UUID
-    capture_source: CaptureSource
-    interface_name: str | None
-    pcap_reference: str
+    @property
+    def capture_session_id(self) -> UUID:
+        ...
 
-    def packets(self, stop_event: Event | None = None) -> Iterator[PacketEnvelope]:
+    @property
+    def capture_source(self) -> CaptureSource:
+        ...
+
+    @property
+    def interface_name(self) -> str | None:
+        ...
+
+    @property
+    def pcap_reference(self) -> str:
+        ...
+
+    def packets(
+        self,
+        stop_event: Event | None = None,
+    ) -> Iterator[PacketEnvelope]:
         """Yield captured packets until exhausted or stopped."""
 
     def close(self) -> None:

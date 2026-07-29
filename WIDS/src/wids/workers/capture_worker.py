@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import argparse
-from collections.abc import Sequence
-from dataclasses import dataclass
 import json
 import logging
-from pathlib import Path
 import signal
+from collections.abc import Sequence
+from dataclasses import dataclass
+from pathlib import Path
 from threading import Lock
 from uuid import uuid4
 
@@ -41,7 +41,6 @@ from wids.workers.heartbeat import (
     HeartbeatPublisher,
     HeartbeatService,
 )
-
 
 logger = logging.getLogger(__name__)
 

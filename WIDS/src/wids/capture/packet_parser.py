@@ -7,15 +7,16 @@ without requiring TShark.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
-from datetime import datetime, timezone
 import json
 import math
 import re
+from collections.abc import Callable, Iterable
+from datetime import UTC, datetime
 from typing import Any
 
 from wids.capture.channel_manager import frequency_to_channel
 from wids.capture.frame_models import (
+    SUBTYPE_BY_CODE,
     EvidenceReference,
     FcsStatus,
     FrameFlags,
@@ -23,23 +24,21 @@ from wids.capture.frame_models import (
     MacAddresses,
     ManagementFields,
     NormalizedWirelessFrame,
-    ParseStatus,
     ParserReason,
     ParserResult,
+    ParseStatus,
     RadioMetadata,
     SecurityClassification,
     SecurityProfile,
     SecurityProtocol,
     SequenceInfo,
     SsidState,
-    SUBTYPE_BY_CODE,
     ensure_utc,
     normalize_mac,
     role_hint_for_subtype,
     sha256_hex,
 )
 from wids.capture.packet_source import PacketEnvelope
-
 
 _MISSING = object()
 _HEX_RE = re.compile(r"^[0-9a-fA-F]+$")
@@ -90,7 +89,7 @@ class PacketParser:
         *,
         clock: Callable[[], datetime] | None = None,
     ) -> None:
-        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._clock = clock or (lambda: datetime.now(UTC))
 
     def parse(self, envelope: PacketEnvelope) -> ParserResult:
         """Parse safely; no per-packet exception escapes this boundary."""
@@ -858,7 +857,7 @@ def _observed_at(packet: Any) -> datetime:
         )
     )
     if epoch is not None and math.isfinite(epoch):
-        return datetime.fromtimestamp(epoch, tz=timezone.utc)
+        return datetime.fromtimestamp(epoch, tz=UTC)
 
     text = _optional_text(value)
     if text:

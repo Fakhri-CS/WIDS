@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import dataclass
 import os
 import re
 import subprocess
-from typing import Protocol
-
+from collections.abc import Sequence
+from dataclasses import dataclass
+from typing import Protocol, TypedDict
 
 _INTERFACE_PATTERN = re.compile(r"^[A-Za-z0-9_.:-]{1,32}$")
 
@@ -97,6 +96,13 @@ class WirelessInterface:
     def monitor_mode(self) -> bool:
         return self.interface_type == "monitor"
 
+class _InterfaceRecord(TypedDict, total=False):
+    name: str
+    phy: str
+    interface_type: str
+    mac_address: str
+    channel: int
+    frequency_mhz: int
 
 class InterfaceManager:
     """Discovers wireless interfaces and changes their operating type."""
@@ -201,7 +207,7 @@ def validate_interface_name(interface_name: str) -> str:
 def _parse_iw_dev(output: str) -> list[WirelessInterface]:
     interfaces: list[WirelessInterface] = []
     phy: str | None = None
-    current: dict[str, object] | None = None
+    current: _InterfaceRecord | None = None
 
     def finish() -> None:
         nonlocal current
@@ -209,24 +215,12 @@ def _parse_iw_dev(output: str) -> list[WirelessInterface]:
             return
         interfaces.append(
             WirelessInterface(
-                name=str(current["name"]),
-                phy=current.get("phy") if isinstance(current.get("phy"), str) else None,
-                interface_type=str(current.get("interface_type", "unknown")),
-                mac_address=(
-                    str(current["mac_address"])
-                    if current.get("mac_address") is not None
-                    else None
-                ),
-                channel=(
-                    int(current["channel"])
-                    if current.get("channel") is not None
-                    else None
-                ),
-                frequency_mhz=(
-                    int(current["frequency_mhz"])
-                    if current.get("frequency_mhz") is not None
-                    else None
-                ),
+                name=current["name"],
+                phy=current.get("phy"),
+                interface_type=current.get("interface_type", "unknown"),
+                mac_address=current.get("mac_address"),
+                channel=current.get("channel"),
+                frequency_mhz=current.get("frequency_mhz"),
                 is_up=False,
             )
         )
@@ -238,10 +232,13 @@ def _parse_iw_dev(output: str) -> list[WirelessInterface]:
             phy = line
         elif line.startswith("Interface "):
             finish()
-            current = {
-                "name": line.removeprefix("Interface ").strip(),
-                "phy": phy,
-            }
+
+            current = {"name": line.removeprefix("Interface ").strip()}
+
+            if phy is not None:
+                current["phy"] = phy
+
+            continue
         elif current is not None and line.startswith("type "):
             current["interface_type"] = line.removeprefix("type ").strip()
         elif current is not None and line.startswith("addr "):

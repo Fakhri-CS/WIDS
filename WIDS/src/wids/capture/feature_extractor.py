@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
+import math
 from collections import Counter, deque
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import math
 from threading import RLock
 from types import MappingProxyType
-from typing import TypeAlias, TypeVar
+from typing import TypeVar
 from uuid import UUID
 
 from wids.capture.frame_models import (
@@ -18,10 +18,9 @@ from wids.capture.frame_models import (
     ensure_utc,
 )
 
-
-RetryIdentity: TypeAlias = tuple[UUID, str, str, int, int]
-GroupKey: TypeAlias = RetryIdentity | tuple[str, UUID]
-SsidBssidKey: TypeAlias = tuple[str, str]
+type RetryIdentity = tuple[UUID, str, str, int, int]
+type GroupKey = RetryIdentity | tuple[str, UUID]
+type SsidBssidKey = tuple[str, str]
 CountKey = TypeVar("CountKey")
 
 
@@ -389,7 +388,7 @@ def _group_key(frame: NormalizedWirelessFrame) -> GroupKey:
     return ("frame", frame.frame_id)
 
 
-def _positive_counts(
+def _positive_counts[CountKey](
     counter: Counter[CountKey],
 ) -> dict[CountKey, int]:
     return {key: value for key, value in counter.items() if value > 0}

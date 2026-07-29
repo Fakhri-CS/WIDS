@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from pathlib import Path
 import struct
-
+from datetime import UTC, datetime
+from pathlib import Path
 
 OUTPUT = Path(__file__).with_name("lab_management_frames.pcap")
 DLT_IEEE802_11_RADIO = 127
@@ -87,7 +86,7 @@ def write_pcap(path: Path, packets: list[bytes]) -> None:
         DLT_IEEE802_11_RADIO,
     )
     base = int(
-        datetime(2026, 7, 27, 6, 31, 44, tzinfo=timezone.utc).timestamp()
+        datetime(2026, 7, 27, 6, 31, 44, tzinfo=UTC).timestamp()
     )
     with path.open("wb") as stream:
         stream.write(global_header)

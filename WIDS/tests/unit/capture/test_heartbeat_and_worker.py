@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
 import unittest
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
+from tests.unit.capture.fakes import make_packet
 from wids.capture.frame_models import CaptureSource, CaptureState
 from wids.capture.packet_source import InMemoryPacketSource
 from wids.workers.capture_worker import CaptureWorker, WorkerConfig
@@ -12,8 +13,6 @@ from wids.workers.heartbeat import (
     InMemoryHeartbeatPublisher,
     heartbeat_is_stale,
 )
-
-from tests.unit.capture.fakes import make_packet
 
 
 class HeartbeatAndWorkerTests(unittest.TestCase):
@@ -69,7 +68,7 @@ class HeartbeatAndWorkerTests(unittest.TestCase):
         )
 
     def test_stale_heartbeat_detection(self) -> None:
-        now = datetime(2026, 7, 27, 12, 0, tzinfo=timezone.utc)
+        now = datetime(2026, 7, 27, 12, 0, tzinfo=UTC)
         self.assertTrue(
             heartbeat_is_stale(
                 now - timedelta(seconds=31),

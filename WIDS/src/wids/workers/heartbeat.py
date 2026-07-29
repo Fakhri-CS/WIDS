@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from threading import Event, Lock, Thread, current_thread
 from typing import Protocol
 
@@ -68,7 +68,7 @@ class HeartbeatService:
         self._status_provider = status_provider
         self._publisher = publisher
         self._on_error = on_error
-        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._clock = clock or (lambda: datetime.now(UTC))
         self._stop_event = Event()
         self._thread: Thread | None = None
         self._lock = Lock()
@@ -159,7 +159,7 @@ def heartbeat_is_stale(
         raise ValueError("stale_after_seconds must be positive")
     if heartbeat_at is None:
         return True
-    current = ensure_utc(now or datetime.now(timezone.utc))
+    current = ensure_utc(now or datetime.now(UTC))
     return current - ensure_utc(heartbeat_at) > timedelta(
         seconds=stale_after_seconds
     )

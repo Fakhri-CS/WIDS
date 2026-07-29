@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import unittest
 
+from tests.unit.capture.fakes import make_packet
 from wids.capture.capture_manager import CaptureManager
 from wids.capture.feature_extractor import FeatureExtractor
 from wids.capture.frame_models import CaptureState
 from wids.capture.packet_parser import PacketParser
 from wids.capture.packet_source import InMemoryPacketSource
-
-from tests.unit.capture.fakes import make_packet
 
 
 class CaptureManagerTests(unittest.TestCase):

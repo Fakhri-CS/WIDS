@@ -11,6 +11,14 @@ src/wids.egg-info/top_level.txt
 src/wids/api/__init__.py
 src/wids/api/health_routes.py
 src/wids/capture/__init__.py
+src/wids/capture/capture_manager.py
+src/wids/capture/channel_manager.py
+src/wids/capture/evidence_writer.py
+src/wids/capture/feature_extractor.py
+src/wids/capture/frame_models.py
+src/wids/capture/interface_manager.py
+src/wids/capture/packet_parser.py
+src/wids/capture/packet_source.py
 src/wids/common/__init__.py
 src/wids/contracts/__init__.py
 src/wids/detection/__init__.py
@@ -21,3 +29,5 @@ src/wids/repositories/__init__.py
 src/wids/schemas/__init__.py
 src/wids/services/__init__.py
 src/wids/workers/__init__.py
+src/wids/workers/capture_worker.py
+src/wids/workers/heartbeat.py

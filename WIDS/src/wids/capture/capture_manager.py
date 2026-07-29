@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from threading import Event, RLock
 from typing import Protocol
 from uuid import UUID
@@ -65,7 +65,7 @@ class CaptureManager:
         self._frame_sink = frame_sink
         self._feature_sink = feature_sink
         self._on_processing_error = on_processing_error
-        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._clock = clock or (lambda: datetime.now(UTC))
         self._stop_event = Event()
         self._lock = RLock()
         self._source: PacketSource | None = None

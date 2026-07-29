@@ -1,20 +1,8 @@
 from __future__ import annotations
 
-from datetime import timedelta
 import unittest
+from datetime import timedelta
 from uuid import uuid4
-
-from wids.capture.frame_models import (
-    CaptureSource,
-    FcsStatus,
-    FrameSubtype,
-    ParseStatus,
-    ParserDisposition,
-    ParserReason,
-    SecurityClassification,
-    SsidState,
-)
-from wids.capture.packet_parser import PacketParser
 
 from tests.unit.capture.fakes import (
     AP,
@@ -24,6 +12,17 @@ from tests.unit.capture.fakes import (
     make_envelope,
     make_packet,
 )
+from wids.capture.frame_models import (
+    CaptureSource,
+    FcsStatus,
+    FrameSubtype,
+    ParserDisposition,
+    ParserReason,
+    ParseStatus,
+    SecurityClassification,
+    SsidState,
+)
+from wids.capture.packet_parser import PacketParser
 
 
 class PacketParserTests(unittest.TestCase):
