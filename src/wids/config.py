@@ -18,11 +18,7 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        (
-            "postgresql+psycopg://"
-            "wids_user:wids_local_dev_2026"
-            "@localhost:5432/wids_db"
-        ),
+        ("postgresql+psycopg://wids_user:wids_local_dev_2026@localhost:5432/wids_db"),
     )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False

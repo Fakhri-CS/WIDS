@@ -29,11 +29,7 @@ def _validate_utc_datetime(
 def _serialize_datetime(value: datetime) -> str:
     """Serialize a UTC datetime using RFC 3339 with microseconds."""
 
-    return (
-        value.astimezone(UTC)
-        .isoformat(timespec="microseconds")
-        .replace("+00:00", "Z")
-    )
+    return value.astimezone(UTC).isoformat(timespec="microseconds").replace("+00:00", "Z")
 
 
 @dataclass(frozen=True, slots=True)
@@ -59,13 +55,8 @@ class EvidenceReference:
         if not self.pcap_reference.strip():
             raise ValueError("pcap_reference must not be empty")
 
-        if (
-            self.frame_sha256 is not None
-            and _SHA256_PATTERN.fullmatch(self.frame_sha256) is None
-        ):
-            raise ValueError(
-                "frame_sha256 must be a lowercase SHA-256 hexadecimal value"
-            )
+        if self.frame_sha256 is not None and _SHA256_PATTERN.fullmatch(self.frame_sha256) is None:
+            raise ValueError("frame_sha256 must be a lowercase SHA-256 hexadecimal value")
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the evidence reference to a JSON-compatible dictionary."""
@@ -121,34 +112,22 @@ class DetectionEvent:
         )
 
         if self.event_contract_version != DETECTION_EVENT_CONTRACT_VERSION:
-            raise ValueError(
-                "Unsupported detection-event contract version"
-            )
+            raise ValueError("Unsupported detection-event contract version")
 
         if not self.frame_contract_version.strip():
-            raise ValueError(
-                "frame_contract_version must not be empty"
-            )
+            raise ValueError("frame_contract_version must not be empty")
 
         if _RULE_CODE_PATTERN.fullmatch(self.rule_code) is None:
-            raise ValueError(
-                "rule_code must use the WIDS-R000 format"
-            )
+            raise ValueError("rule_code must use the WIDS-R000 format")
 
         if _EVENT_TYPE_PATTERN.fullmatch(self.event_type) is None:
-            raise ValueError(
-                "event_type must use lowercase snake_case"
-            )
+            raise ValueError("event_type must use lowercase snake_case")
 
         if _SHA256_PATTERN.fullmatch(self.correlation_key) is None:
-            raise ValueError(
-                "correlation_key must be a lowercase SHA-256 value"
-            )
+            raise ValueError("correlation_key must be a lowercase SHA-256 value")
 
         if self.correlation_window_seconds < 1:
-            raise ValueError(
-                "correlation_window_seconds must be positive"
-            )
+            raise ValueError("correlation_window_seconds must be positive")
 
         if not self.title.strip():
             raise ValueError("title must not be empty")
@@ -157,13 +136,8 @@ class DetectionEvent:
             raise ValueError("description must not be empty")
 
         for evidence_reference in self.evidence:
-            if (
-                evidence_reference.capture_session_id
-                != self.capture_session_id
-            ):
-                raise ValueError(
-                    "All evidence must belong to the event capture session"
-                )
+            if evidence_reference.capture_session_id != self.capture_session_id:
+                raise ValueError("All evidence must belong to the event capture session")
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the event to a JSON-compatible dictionary."""
@@ -178,9 +152,7 @@ class DetectionEvent:
             "detected_at": _serialize_datetime(self.detected_at),
             "severity": self.severity.value,
             "correlation_key": self.correlation_key,
-            "correlation_window_seconds": (
-                self.correlation_window_seconds
-            ),
+            "correlation_window_seconds": (self.correlation_window_seconds),
             "transmitter_mac": self.transmitter_mac,
             "receiver_mac": self.receiver_mac,
             "source_mac": self.source_mac,
@@ -192,8 +164,5 @@ class DetectionEvent:
             "title": self.title,
             "description": self.description,
             "metrics": dict(self.metrics),
-            "evidence": [
-                evidence_reference.to_dict()
-                for evidence_reference in self.evidence
-            ],
+            "evidence": [evidence_reference.to_dict() for evidence_reference in self.evidence],
         }

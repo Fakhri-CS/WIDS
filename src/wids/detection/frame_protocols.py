@@ -25,7 +25,12 @@ class FrameRadio(Protocol):
 
 
 class FrameManagement(Protocol):
+    ssid: str | None
+    ssid_hex: str | None
+    ssid_state: str
+
     reason_code: int | None
+    authentication_sequence: int | None
 
 
 class FrameEvidence(Protocol):
@@ -34,7 +39,7 @@ class FrameEvidence(Protocol):
 
 
 class NormalizedWirelessFrameProtocol(Protocol):
-    """Fields used by Version 1 wireless detection rules."""
+    """Fields consumed by Version 1 detection rules."""
 
     contract_version: str
     frame_id: UUID

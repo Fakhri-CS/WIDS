@@ -1,4 +1,4 @@
-#!/home/hani/Desktop/WIDS/.venv/bin/python3.12
+#!/home/marlie/Projects/WIDS/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
