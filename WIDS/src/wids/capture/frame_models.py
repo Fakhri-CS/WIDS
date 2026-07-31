@@ -6,17 +6,17 @@ Downstream code must never depend on PyShark or Wireshark field names.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import StrEnum
 import hashlib
 import json
 import math
 import re
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from enum import StrEnum
 from types import MappingProxyType
-from typing import Any, Mapping
+from typing import Any
 from uuid import UUID, uuid4
-
 
 CONTRACT_VERSION = "1.0"
 _MAC_PATTERN = re.compile(r"^[0-9A-F]{12}$")
@@ -187,8 +187,8 @@ def ensure_utc(value: datetime) -> datetime:
     """Normalize a datetime to timezone-aware UTC."""
 
     if value.tzinfo is None:
-        value = value.replace(tzinfo=timezone.utc)
-    return value.astimezone(timezone.utc)
+        value = value.replace(tzinfo=UTC)
+    return value.astimezone(UTC)
 
 
 def datetime_to_rfc3339(value: datetime) -> str:
@@ -513,7 +513,7 @@ class NormalizedWirelessFrame:
     parse_warnings: tuple[str, ...] = ()
     frame_id: UUID = field(default_factory=uuid4)
     ingested_at: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        default_factory=lambda: datetime.now(UTC)
     )
     contract_version: str = CONTRACT_VERSION
     frame_type: FrameType = FrameType.MANAGEMENT

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from types import SimpleNamespace
 from typing import Any
 from uuid import UUID, uuid4
@@ -12,8 +12,7 @@ from wids.capture.frame_models import CaptureSource
 from wids.capture.interface_manager import CommandResult
 from wids.capture.packet_source import PacketEnvelope
 
-
-DEFAULT_TIME = datetime(2026, 7, 27, 6, 31, 44, tzinfo=timezone.utc)
+DEFAULT_TIME = datetime(2026, 7, 27, 6, 31, 44, tzinfo=UTC)
 AP = "AA:BB:CC:DD:EE:FF"
 STATION = "11:22:33:44:55:66"
 BROADCAST = "FF:FF:FF:FF:FF:FF"

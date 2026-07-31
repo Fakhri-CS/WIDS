@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import dataclass
-from datetime import datetime, timezone
 import hashlib
 import os
-from pathlib import Path
 import shutil
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from pathlib import Path
 from threading import Lock
 from uuid import UUID
 
@@ -55,7 +55,7 @@ class EvidenceWriter:
     ) -> None:
         self.root_directory = Path(root_directory).expanduser()
         self.reference_prefix = _normalize_reference(reference_prefix)
-        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._clock = clock or (lambda: datetime.now(UTC))
         self._lock = Lock()
 
     def prepare_live_capture(

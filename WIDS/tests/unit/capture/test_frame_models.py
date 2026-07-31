@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import FrozenInstanceError
 import unittest
+from dataclasses import FrozenInstanceError
 
+from tests.unit.capture.fakes import make_envelope
 from wids.capture.frame_models import (
     NormalizedWirelessFrame,
     SecurityClassification,
@@ -11,8 +12,6 @@ from wids.capture.frame_models import (
     normalize_mac,
 )
 from wids.capture.packet_parser import PacketParser
-
-from tests.unit.capture.fakes import make_envelope
 
 
 class FrameModelTests(unittest.TestCase):

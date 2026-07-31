@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import importlib
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
-import importlib
 from pathlib import Path
 from threading import Event, Lock
 from typing import Any, Protocol
@@ -38,16 +38,36 @@ class PacketEnvelope:
 class PacketSource(Protocol):
     """Common interface implemented by every packet source."""
 
-    capture_session_id: UUID
-    capture_source: CaptureSource
-    interface_name: str | None
-    pcap_reference: str
+    @property
+    def capture_session_id(self) -> UUID:
+        """Return the stable capture-session identifier."""
+        ...
 
-    def packets(self, stop_event: Event | None = None) -> Iterator[PacketEnvelope]:
+    @property
+    def capture_source(self) -> CaptureSource:
+        """Return whether this is live capture or PCAP replay."""
+        ...
+
+    @property
+    def interface_name(self) -> str | None:
+        """Return the live interface, when applicable."""
+        ...
+
+    @property
+    def pcap_reference(self) -> str:
+        """Return the opaque evidence-PCAP reference."""
+        ...
+
+    def packets(
+        self,
+        stop_event: Event | None = None,
+    ) -> Iterator[PacketEnvelope]:
         """Yield captured packets until exhausted or stopped."""
+        ...
 
     def close(self) -> None:
         """Release TShark/PyShark resources."""
+        ...
 
 
 CaptureFactory = Callable[..., Any]
@@ -86,9 +106,7 @@ class PcapPacketSource:
     def packets(self, stop_event: Event | None = None) -> Iterator[PacketEnvelope]:
         capture: Any | None = None
         try:
-            kwargs: dict[str, Any] = {
-                "keep_packets": False
-            }
+            kwargs: dict[str, Any] = {"keep_packets": False}
             if self.display_filter:
                 kwargs["display_filter"] = self.display_filter
             capture = self._capture_factory(str(self.path), **kwargs)
@@ -107,9 +125,7 @@ class PcapPacketSource:
                     pcap_reference=self.pcap_reference,
                 )
         except (OSError, RuntimeError) as error:
-            raise PacketSourceError(
-                f"Unable to replay PCAP {self.path.name}: {error}"
-            ) from error
+            raise PacketSourceError(f"Unable to replay PCAP {self.path.name}: {error}") from error
         finally:
             self._close_capture(capture)
 

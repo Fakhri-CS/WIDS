@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from datetime import timedelta
 import unittest
+from datetime import timedelta
 from uuid import uuid4
-
-from wids.capture.feature_extractor import FeatureExtractor
-from wids.capture.packet_parser import PacketParser
 
 from tests.unit.capture.fakes import (
     AP,
@@ -13,6 +10,8 @@ from tests.unit.capture.fakes import (
     make_envelope,
     make_packet,
 )
+from wids.capture.feature_extractor import FeatureExtractor
+from wids.capture.packet_parser import PacketParser
 
 
 class FeatureExtractorTests(unittest.TestCase):

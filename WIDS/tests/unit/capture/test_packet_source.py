@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import unittest
-
-from wids.capture.frame_models import CaptureSource
-from wids.capture.packet_source import LivePacketSource, PcapPacketSource
 
 from tests.unit.capture.fakes import make_packet
+from wids.capture.frame_models import CaptureSource
+from wids.capture.packet_source import LivePacketSource, PcapPacketSource
 
 
 class FakeFileCapture:

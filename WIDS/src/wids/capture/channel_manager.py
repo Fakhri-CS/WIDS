@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from enum import StrEnum
-import re
 from threading import Event, Lock, Thread, current_thread
 
 from wids.capture.interface_manager import (

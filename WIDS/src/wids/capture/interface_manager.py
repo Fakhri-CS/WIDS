@@ -2,15 +2,25 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import dataclass
 import os
 import re
 import subprocess
-from typing import Protocol
-
+from collections.abc import Sequence
+from dataclasses import dataclass
+from typing import Protocol, TypedDict
 
 _INTERFACE_PATTERN = re.compile(r"^[A-Za-z0-9_.:-]{1,32}$")
+
+
+class _InterfaceRecord(TypedDict, total=False):
+    """Partially parsed fields for one wireless interface."""
+
+    name: str
+    phy: str | None
+    interface_type: str
+    mac_address: str
+    channel: int
+    frequency_mhz: int
 
 
 class InterfaceManagerError(RuntimeError):
@@ -63,9 +73,7 @@ class SubprocessCommandRunner:
                 env={**os.environ, "LC_ALL": "C"},
             )
         except (FileNotFoundError, subprocess.TimeoutExpired) as error:
-            raise InterfaceManagerError(
-                f"Unable to execute {args[0]!r}: {error}"
-            ) from error
+            raise InterfaceManagerError(f"Unable to execute {args[0]!r}: {error}") from error
 
         result = CommandResult(
             args=tuple(args),
@@ -75,9 +83,7 @@ class SubprocessCommandRunner:
         )
         if check and result.returncode != 0:
             detail = result.stderr.strip() or result.stdout.strip()
-            raise InterfaceManagerError(
-                f"Command {args[0]!r} failed: {detail or 'unknown error'}"
-            )
+            raise InterfaceManagerError(f"Command {args[0]!r} failed: {detail or 'unknown error'}")
         return result
 
 
@@ -174,9 +180,7 @@ class InterfaceManager:
 
         updated = self.get_interface(name)
         if updated.interface_type != interface_type:
-            raise InterfaceManagerError(
-                f"{name} did not enter {interface_type} mode"
-            )
+            raise InterfaceManagerError(f"{name} did not enter {interface_type} mode")
         return updated
 
     def _is_up(self, interface_name: str) -> bool:
@@ -199,57 +203,73 @@ def validate_interface_name(interface_name: str) -> str:
 
 
 def _parse_iw_dev(output: str) -> list[WirelessInterface]:
+    """Parse the stable fields reported by ``iw dev``."""
+
     interfaces: list[WirelessInterface] = []
+
     phy: str | None = None
-    current: dict[str, object] | None = None
+    current: _InterfaceRecord | None = None
 
     def finish() -> None:
         nonlocal current
+
         if current is None:
             return
+
+        name = current.get("name")
+
+        if name is None:
+            current = None
+            return
+
         interfaces.append(
             WirelessInterface(
-                name=str(current["name"]),
-                phy=current.get("phy") if isinstance(current.get("phy"), str) else None,
-                interface_type=str(current.get("interface_type", "unknown")),
-                mac_address=(
-                    str(current["mac_address"])
-                    if current.get("mac_address") is not None
-                    else None
+                name=name,
+                phy=current.get("phy"),
+                interface_type=current.get(
+                    "interface_type",
+                    "unknown",
                 ),
-                channel=(
-                    int(current["channel"])
-                    if current.get("channel") is not None
-                    else None
-                ),
-                frequency_mhz=(
-                    int(current["frequency_mhz"])
-                    if current.get("frequency_mhz") is not None
-                    else None
-                ),
+                mac_address=current.get("mac_address"),
+                channel=current.get("channel"),
+                frequency_mhz=current.get("frequency_mhz"),
                 is_up=False,
             )
         )
+
         current = None
 
     for raw_line in output.splitlines():
         line = raw_line.strip()
+
         if line.startswith("phy#"):
             phy = line
+
         elif line.startswith("Interface "):
             finish()
+
             current = {
                 "name": line.removeprefix("Interface ").strip(),
                 "phy": phy,
             }
+
         elif current is not None and line.startswith("type "):
             current["interface_type"] = line.removeprefix("type ").strip()
+
         elif current is not None and line.startswith("addr "):
             current["mac_address"] = line.removeprefix("addr ").strip().upper()
+
         elif current is not None and line.startswith("channel "):
-            match = re.search(r"channel\s+(\d+)\s+\((\d+)\s+MHz\)", line)
-            if match:
+            match = re.search(
+                r"channel\s+(\d+)\s+\((\d+)\s+MHz\)",
+                line,
+            )
+
+            if match is not None:
                 current["channel"] = int(match.group(1))
+
                 current["frequency_mhz"] = int(match.group(2))
+
     finish()
+
     return interfaces

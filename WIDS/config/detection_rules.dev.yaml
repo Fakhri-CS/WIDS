@@ -1,0 +1,49 @@
+# Development-only detection configuration.
+# These thresholds are intentionally low for integration testing.
+# Do not treat them as production-calibrated values.
+
+rules:
+  WIDS-R001:
+    event_type: deauthentication_flood
+    enabled: true
+    severity: high
+    correlation_window_seconds: 60
+    cooldown_seconds: 30
+    threshold: 3
+    window_seconds: 10
+
+  WIDS-R002:
+    event_type: disassociation_flood
+    enabled: true
+    severity: high
+    correlation_window_seconds: 60
+    cooldown_seconds: 30
+    threshold: 3
+    window_seconds: 10
+
+  WIDS-R003:
+    event_type: authentication_flood
+    enabled: true
+    severity: high
+    correlation_window_seconds: 60
+    cooldown_seconds: 30
+    threshold: 3
+    window_seconds: 10
+
+  WIDS-R004:
+    event_type: probe_request_flood
+    enabled: true
+    severity: medium
+    correlation_window_seconds: 60
+    cooldown_seconds: 30
+    threshold: 3
+    window_seconds: 10
+
+  WIDS-R005:
+    event_type: beacon_flood
+    enabled: true
+    severity: medium
+    correlation_window_seconds: 60
+    cooldown_seconds: 30
+    threshold: 3
+    window_seconds: 10
